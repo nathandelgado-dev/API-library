@@ -13,6 +13,10 @@ const UserSchema = Schema({
         type: String,
         requiered: true
     },
+    borrowedBooks: {
+        type: Array,
+        default: []
+    },
     status: {
         type: Boolean,
         default: true

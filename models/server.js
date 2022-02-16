@@ -9,7 +9,7 @@ class Server {
         this.path = {
             books: '/api/books',
             categories: '/api/categories',
-            notFound: '/*',
+            notFound: '*',
             users: '/api/users'
         };
         this.middlewares();
@@ -25,7 +25,7 @@ class Server {
         this.app.use(express.json());
 
         //Public patch
-        this.app.use(express.static('public'));
+        // this.app.use(express.static('public'));
     }
 
     routes() {

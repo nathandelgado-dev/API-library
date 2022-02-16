@@ -14,7 +14,8 @@ const UserSchema = Schema({
         requiered: true
     },
     borrowedBooks: {
-        type: Array,
+        type: Schema.Types.Array,
+        ref: 'Book',
         default: []
     },
     status: {
@@ -31,7 +32,7 @@ const UserSchema = Schema({
 });
 
 UserSchema.methods.toJSON = function() {
-    const { __v, pass, _id, borrowedBooks, updatedAt, status, ...user } = this.toObject();
+    const { __v, pass, _id, updatedAt, status, ...user } = this.toObject();
     user.uid = _id;
     return user;
 };

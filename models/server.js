@@ -32,6 +32,7 @@ class Server {
         this.app.use(this.path.users, require('../routes/users.routes'));
         this.app.use(this.path.books, require('../routes/books.routes'));
         this.app.use(this.path.categories, require('../routes/categories.routes'));
+        this.app.use(this.path.notFound, require('../routes/notFound.routes'));
     }
 
     async conectDB() {

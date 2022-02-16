@@ -23,7 +23,8 @@ const BookSchema = Schema({
         default: 1
     },
     borrowedToUser: {
-        type: Array,
+        type: Schema.Types.Array,
+        ref: 'User',
         default: []
     },
     status: {
@@ -40,7 +41,7 @@ const BookSchema = Schema({
 });
 
 BookSchema.methods.toJSON = function() {
-    const { __v, updatedAt, createdAt, ...book } = this.toObject();
+    const { __v, updatedAt, createdAt, status, ...book } = this.toObject();
     return book;
 };
 

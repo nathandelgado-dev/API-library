@@ -1,8 +1,8 @@
 {
   "name": "api-library",
   "version": "1.0.0",
-  "description": "Remember execute ``` npm install ``` for use the packages that i used in this proyect and create your .env file, look a .env.example for make this.",
-  "main": "index.js",
+  "description": "",
+  "main": "app.js",
   "scripts": {
     "start": "node app.js",
     "test": "npx jest"

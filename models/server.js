@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const {dbConnection} = require('../db/config.db');
@@ -25,7 +26,8 @@ class Server {
         this.app.use(express.json());
 
         //Public patch
-        // this.app.use(express.static('public'));
+        this.app.use(express.static(path.join(__dirname, '../public')));
+
     }
 
     routes() {

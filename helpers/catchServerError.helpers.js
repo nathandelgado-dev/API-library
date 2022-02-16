@@ -1,4 +1,4 @@
-const sendServerError = (err) => {
+const sendServerError = (err, res) => {
     console.error(err);
     res.status(500).json({
     ok: false,

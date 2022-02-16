@@ -9,14 +9,16 @@ const {
 
 const getAllUsers = async(req, res) => {
     try {
-        const activeUsers = await User.find({ status: true });
+        const activeUsers = await User.find({ status: true })
+            .populate({ path: 'borrowedBooks', select: 'name'});
     
         res.status(200).json({
             ok: true,
+            amount: activeUsers.length,
             users: activeUsers
         });        
     } catch (err) {
-        sendServerError(err);
+        sendServerError(err, res);
     }
 }
 
@@ -24,14 +26,22 @@ const getUser = async(req, res) => {
     try {
         const {id} = req.params;
     
-        const user = await User.findById(id);
-    
+        const user = await User.findById(id)
+            .populate({ path: 'borrowedBooks', select: 'name'});
+
+        if(!user) {
+            res.status(400).json({
+                ok: false,
+                msg: 'The user not exist'
+            });  
+        }
+            
         res.status(200).json({
             ok: true,
             user
         });        
     } catch (err) {
-        sendServerError(err);
+        sendServerError(err, res);
     }
 }
 
@@ -48,14 +58,14 @@ const userSignup = async(req, res) => {
         newUser.pass = encryptPass(pass)
 
         await newUser.save();
-        res.status(200)
+        res.status(201)
             .json({
                 ok: true,
-                msg: 'User saved'
+                msg: 'User created'
             });
 
     } catch (err) {
-        sendServerError(err);
+        sendServerError(err, res);
     }
 }
 
@@ -89,7 +99,7 @@ const userSignin = async(req, res) => {
             token      
         });
     } catch (error) {
-        sendServerError(err);
+        sendServerError(err, res);
     }
 }
 
@@ -97,6 +107,14 @@ const updateUser = async(req, res) => {
     try {
         const {id} = req.params;
         const {email, pass} = req.body;
+        const userByJWT = req.user;
+
+        if(userByJWT.id !== id){
+            return res.status(401).json({
+                ok: false,
+                msg: 'Only you can modify your own account'
+            });
+        }
         
         if(!email && !pass) {
             return res.status(400).json({
@@ -120,18 +138,26 @@ const updateUser = async(req, res) => {
 
         await User.findByIdAndUpdate({ _id: user.id }, updateUser);
 
-        res.status(200).json({
+        res.status(201).json({
             ok: true,
             msg: 'User updated'
         });        
     } catch (err) {
-        sendServerError(err);
+        sendServerError(err, res);
     }
 }
 
 const deleteUser = async(req, res) => {
     try {
         const {id} = req.params;
+        const user = req.user;
+
+        if(user.id !== id) {
+            return res.status(401).json({
+                ok: false,
+                msg: 'Only you can delete your own account'
+            });
+        } 
     
         await User.findByIdAndUpdate({ _id: id }, { status: false });
     
@@ -140,7 +166,7 @@ const deleteUser = async(req, res) => {
             msg: 'User deleted'
         });        
     } catch (err) {
-        sendServerError(err);
+        sendServerError(err, res);
     }
 }
 

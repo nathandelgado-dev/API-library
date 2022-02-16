@@ -39,7 +39,7 @@ router.post('/signup', [
 ], userSignup);
 
 router.post('/signin', [
-    check('email', 'The email is requiered').not().isEmpty(),
+    check('email', 'The email is required').not().isEmpty(),
     check('pass', 'The password is required').not().isEmpty(),
     check('pass', 'The value require min 8 caracters').isLength({ min: 8 }),
     check('email', 'The value of email is invalid').isEmail(),
@@ -48,8 +48,8 @@ router.post('/signin', [
 
 router.put('/:id', [
     validateJWT,
-    check('emil', 'Not valid email').if(check('weight').exists()).isEmail(),
-    check('pass', 'The value require min 8 caracters').if(check('weight').exists()).isLength({ min: 8 }),
+    check('email', 'Not valid email').if(check('email').exists()).isEmail(),
+    check('pass', 'The value require min 8 caracters').if(check('pass').exists()).isLength({ min: 8 }),
     check('borrowedBooks', 'Not valid id').if(check('borrowedBooks').exists()).isMongoId(),
     validateErrors
 ], updateUser);
